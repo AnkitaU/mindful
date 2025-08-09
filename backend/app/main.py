@@ -1,21 +1,19 @@
-import os
 from fastapi import FastAPI
-from dotenv import load_dotenv
-from pymongo import MongoClient
-
-load_dotenv()
+from fastapi.middleware.cors import CORSMiddleware
+from app.api.v1.api import router as api_router
 
 app = FastAPI()
 
-@app.on_event("startup")
-def startup_db_client():
-    app.mongodb_client = MongoClient(os.getenv("DATABASE_URL"))
-    app.database = app.mongodb_client.get_database("habit_builder")
-    print("Connected to the MongoDB database.")
+# CORS Middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],  # Adjust for your frontend URL
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-@app.on_event("shutdown")
-def shutdown_db_client():
-    app.mongodb_client.close()
+app.include_router(api_router, prefix="/api/v1")
 
 @app.get("/api/v1/health")
 def read_root():

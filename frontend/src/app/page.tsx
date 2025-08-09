@@ -1,32 +1,44 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
-export default function Home() {
-  const [status, setStatus] = useState("loading...");
+export default function DashboardPage() {
+  const { isAuthenticated, user, logout, loading } = useAuth();
+  const router = useRouter();
 
   useEffect(() => {
-    const fetchStatus = async () => {
-      try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/health`
-        );
-        const data = await res.json();
-        setStatus(data.status);
-      } catch (error) {
-        setStatus("error");
-      }
-    };
+    if (!loading && !isAuthenticated) {
+      router.push("/login");
+    }
+  }, [isAuthenticated, loading, router]);
 
-    fetchStatus();
-  }, []);
+  if (loading || !isAuthenticated) {
+    // You can add a spinner or a loading component here
+    return (
+      <div className="flex min-h-screen flex-col items-center justify-center p-24">
+        <p>Loading...</p>
+      </div>
+    );
+  }
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-24">
-      <h1 className="text-4xl font-bold">AI Habit Builder</h1>
+    <div className="flex min-h-screen flex-col items-center justify-center p-24">
+      <h1 className="text-4xl font-bold">Dashboard</h1>
       <p className="mt-4">
-        Backend Status: <span className="font-bold">{status}</span>
+        Welcome, <span className="font-bold">{user?.email}</span>
       </p>
-    </main>
+      <Button
+        onClick={() => {
+          logout();
+          router.push("/login");
+        }}
+        className="mt-4"
+      >
+        Logout
+      </Button>
+    </div>
   );
 }
