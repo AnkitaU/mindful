@@ -26,3 +26,40 @@ class Token(BaseModel):
 
 class TokenData(BaseModel):
     email: Optional[str] = None
+
+class GoalBase(BaseModel):
+    description: str
+
+class GoalCreate(GoalBase):
+    pass
+
+class Goal(GoalBase):
+    id: str = Field(..., alias="_id")
+    userId: str
+    createdAt: datetime
+
+    class Config:
+        orm_mode = True
+        allow_population_by_field_name = True
+        json_encoders = {
+            datetime: lambda v: v.isoformat(),
+        }
+
+class HabitBase(BaseModel):
+    description: str
+    frequency: str # "daily" or "weekly"
+
+class HabitCreate(HabitBase):
+    pass
+
+class Habit(HabitBase):
+    id: str = Field(..., alias="_id")
+    goalId: str
+    createdAt: datetime
+
+    class Config:
+        orm_mode = True
+        allow_population_by_field_name = True
+        json_encoders = {
+            datetime: lambda v: v.isoformat(),
+        }
