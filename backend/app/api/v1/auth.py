@@ -28,6 +28,9 @@ async def register_user(user: UserCreate, db: Database = Depends(get_database)):
     result = await db.users.insert_one(user_doc)
     created_user = await db.users.find_one({"_id": result.inserted_id})
     
+    print(f"Created user from DB: {created_user}")
+    print(f"Type of _id: {type(created_user['_id'])}")
+
     return created_user
 
 from fastapi.security import OAuth2PasswordRequestForm

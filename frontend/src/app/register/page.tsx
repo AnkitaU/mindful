@@ -41,7 +41,7 @@ export default function RegisterPage() {
       }
 
       // Then, log the user in
-      const loginResponse = await fetch("/api/v1/auth/login", {
+      const loginResponse = await fetch("http://localhost:8000/api/v1/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: new URLSearchParams({

@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from typing import List
 from app.models import GoalCreate, Goal, Habit, HabitCreate
-from app.database import db
+from app.database import database as db
 from app.ai_service import generate_habit_plan
 from app.auth import get_current_user
 from app.models import User

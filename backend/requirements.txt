@@ -1,9 +1,11 @@
 fastapi~=0.116.1
 uvicorn[standard]
-pydantic
+pydantic[email]
 python-dotenv
 pymongo~=4.14.0
 passlib[bcrypt]~=1.7.4
 python-jose~=3.5.0
 openai~=1.99.2
 openai
+motor
+python-multipart
