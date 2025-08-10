@@ -71,3 +71,6 @@ class GoalCreate(BaseModel):
 
 class GoalWithHabits(Goal):
     habits: list[Habit]
+
+class GoalUpdate(BaseModel):
+    description: str

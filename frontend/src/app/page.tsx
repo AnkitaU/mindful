@@ -26,7 +26,7 @@ export default function DashboardPage() {
         return;
       }
       try {
-        const response = await fetch("/api/v1/goals", {
+        const response = await fetch("http://localhost:8000/api/v1/goals", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -46,6 +46,10 @@ export default function DashboardPage() {
       fetchGoals();
     }
   }, [isAuthenticated, router]);
+
+  const handleGoalDeleted = (goalId: string) => {
+    setGoals((prevGoals) => prevGoals.filter((goal) => goal._id !== goalId));
+  };
 
   if (loading || !isAuthenticated) {
     return (
@@ -78,7 +82,13 @@ export default function DashboardPage() {
 
       <div className="mt-8 w-full max-w-4xl">
         {goals.length > 0 ? (
-          goals.map((goal) => <HabitTracker key={goal._id} goal={goal} />)
+          goals.map((goal) => (
+            <HabitTracker
+              key={goal._id}
+              goal={goal}
+              onGoalDeleted={handleGoalDeleted}
+            />
+          ))
         ) : (
           <p>You haven't set any goals yet. Get started!</p>
         )}
