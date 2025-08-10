@@ -1,6 +1,23 @@
-from pydantic import BaseModel, Field, EmailStr
+from pydantic import BaseModel, Field, EmailStr, validator
 from datetime import datetime
 from typing import Optional
+from bson import ObjectId
+
+class PyObjectId(ObjectId):
+    @classmethod
+    def __get_validators__(cls):
+        yield cls.validate
+
+    @classmethod
+    def validate(cls, v, _):
+        if not ObjectId.is_valid(v):
+            raise ValueError("Invalid objectid")
+        return ObjectId(v)
+
+    @classmethod
+    def __get_pydantic_json_schema__(cls, field_schema):
+        field_schema.update(type="string")
+        return field_schema
 
 class UserBase(BaseModel):
     email: EmailStr
@@ -9,7 +26,7 @@ class UserCreate(UserBase):
     password: str
 
 class User(UserBase):
-    id: str = Field(..., alias="_id")
+    id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
     hashed_password: str
     createdAt: datetime
 
@@ -17,6 +34,7 @@ class User(UserBase):
         orm_mode = True
         allow_population_by_field_name = True
         json_encoders = {
+            ObjectId: str,
             datetime: lambda v: v.isoformat(),
         }
 
@@ -27,39 +45,29 @@ class Token(BaseModel):
 class TokenData(BaseModel):
     email: Optional[str] = None
 
-class GoalBase(BaseModel):
+class Habit(BaseModel):
+    id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
     description: str
-
-class GoalCreate(GoalBase):
-    pass
-
-class Goal(GoalBase):
-    id: str = Field(..., alias="_id")
-    userId: str
-    createdAt: datetime
+    frequency: str # e.g., "daily", "weekly"
+    goal_id: PyObjectId = Field(...)
 
     class Config:
-        orm_mode = True
         allow_population_by_field_name = True
-        json_encoders = {
-            datetime: lambda v: v.isoformat(),
-        }
+        arbitrary_types_allowed = True
+        json_encoders = {ObjectId: str}
 
-class HabitBase(BaseModel):
+class Goal(BaseModel):
+    id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
     description: str
-    frequency: str # "daily" or "weekly"
-
-class HabitCreate(HabitBase):
-    pass
-
-class Habit(HabitBase):
-    id: str = Field(..., alias="_id")
-    goalId: str
-    createdAt: datetime
+    user_id: PyObjectId = Field(...)
 
     class Config:
-        orm_mode = True
         allow_population_by_field_name = True
-        json_encoders = {
-            datetime: lambda v: v.isoformat(),
-        }
+        arbitrary_types_allowed = True
+        json_encoders = {ObjectId: str}
+
+class GoalCreate(BaseModel):
+    description: str
+
+class GoalWithHabits(Goal):
+    habits: list[Habit]

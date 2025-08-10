@@ -4,9 +4,9 @@ from pymongo import MongoClient
 from motor.motor_asyncio import AsyncIOMotorClient
 
 def get_mongo_url():
-    username = os.getenv("MONGO_USERNAME", "user1")
-    password = os.getenv("MONGO_PASSWORD", "13~F43+z^t_6")
-    host = os.getenv("MONGO_HOST", "cluster0.svo2eme.mongodb.net")
+    username = os.getenv("MONGO_USERNAME")
+    password = os.getenv("MONGO_PASSWORD")
+    host = os.getenv("MONGO_HOST")
     
     encoded_password = urllib.parse.quote_plus(password)
     
