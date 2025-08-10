@@ -14,3 +14,9 @@ export interface Goal {
 export interface GoalWithHabits extends Goal {
   habits: Habit[];
 }
+export interface Todo {
+  _id: string;
+  description: string;
+  completed: boolean;
+  due_date: string;
+}

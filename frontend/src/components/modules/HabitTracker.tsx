@@ -85,7 +85,7 @@ export default function HabitTracker({ goal, onGoalDeleted }: HabitTrackerProps)
 
   return (
     <>
-      <Card className="w-full max-w-md">
+      <Card className="w-full">
         <CardHeader>
           <div className="flex justify-between items-start">
             <CardTitle>{goal.description}</CardTitle>

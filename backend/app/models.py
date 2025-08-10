@@ -66,6 +66,9 @@ class Goal(BaseModel):
         arbitrary_types_allowed = True
         json_encoders = {ObjectId: str}
 
+class TodoUpdate(BaseModel):
+    completed: bool
+
 class GoalCreate(BaseModel):
     description: str
 
@@ -74,3 +77,16 @@ class GoalWithHabits(Goal):
 
 class GoalUpdate(BaseModel):
     description: str
+
+class Todo(BaseModel):
+    id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
+    description: str
+    completed: bool = False
+    due_date: datetime
+    user_id: PyObjectId = Field(...)
+    habit_id: Optional[PyObjectId] = Field(None)
+
+    class Config:
+        allow_population_by_field_name = True
+        arbitrary_types_allowed = True
+        json_encoders = {ObjectId: str}
