@@ -12,14 +12,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { useState } from "react";
-import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 
 export default function RegisterPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const { login } = useAuth();
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -27,7 +25,6 @@ export default function RegisterPage() {
     setError("");
 
     try {
-      // First, register the user
       const registerResponse = await fetch("/api/v1/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -40,23 +37,7 @@ export default function RegisterPage() {
         return;
       }
 
-      // Then, log the user in
-      const loginResponse = await fetch("http://localhost:8000/api/v1/auth/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: new URLSearchParams({
-          username: email,
-          password: password,
-        }),
-      });
-
-      if (loginResponse.ok) {
-        const data = await loginResponse.json();
-        await login(data.access_token);
-        router.push("/");
-      } else {
-        setError("Registered successfully, but failed to log in.");
-      }
+      router.push("/login");
     } catch (err) {
       setError("An unexpected error occurred.");
     }
