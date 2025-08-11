@@ -70,3 +70,18 @@ async def update_todo(
         return Todo(**updated_todo)
     else:
         raise HTTPException(status_code=404, detail="Todo not found")
+
+@router.delete("/{todo_id}", status_code=204)
+async def delete_todo(
+    todo_id: str,
+    db=Depends(get_database),
+    current_user: User = Depends(get_current_user),
+):
+    todo_object_id = ObjectId(todo_id)
+    
+    delete_result = await db.todos.delete_one(
+        {"_id": todo_object_id, "user_id": current_user.id}
+    )
+
+    if delete_result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Todo not found")

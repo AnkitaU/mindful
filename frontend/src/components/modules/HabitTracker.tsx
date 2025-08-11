@@ -28,7 +28,7 @@ export default function HabitTracker({ goal, onGoalDeleted }: HabitTrackerProps)
   const [goalToDelete, setGoalToDelete] = useState<string | null>(null);
 
   const handleEdit = () => {
-    router.push(`/new-goal?goal_id=${goal._id}&description=${encodeURIComponent(goal.description)}`);
+    router.push(`/edit-habits?goal_id=${goal._id}`);
   };
 
   const handleDeleteClick = (goalId: string) => {
@@ -50,7 +50,7 @@ export default function HabitTracker({ goal, onGoalDeleted }: HabitTrackerProps)
     }
 
     try {
-      const response = await fetch(`http://localhost:8000/api/v1/goals/${goalToDelete}`, {
+      const response = await fetch(`http://localhost:8001/api/v1/goals/${goalToDelete}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,

@@ -56,6 +56,48 @@
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%
   }
+  .theme-blue {
+    --background: 210 40% 98%;
+    --foreground: 210 40% 10%;
+    --card: 210 40% 98%;
+    --card-foreground: 210 40% 10%;
+    --popover: 210 40% 98%;
+    --popover-foreground: 210 40% 10%;
+    --primary: 210 90% 50%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 210 40% 90%;
+    --secondary-foreground: 210 40% 10%;
+    --muted: 210 40% 90%;
+    --muted-foreground: 210 40% 40%;
+    --accent: 210 40% 90%;
+    --accent-foreground: 210 40% 10%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 210 40% 80%;
+    --input: 210 40% 80%;
+    --ring: 210 90% 50%;
+  }
+  .theme-coral {
+    --background: 350 100% 97%;
+    --foreground: 350 100% 10%;
+    --card: 350 100% 97%;
+    --card-foreground: 350 100% 10%;
+    --popover: 350 100% 97%;
+    --popover-foreground: 350 100% 10%;
+    --primary: 350 91% 71%;
+    --primary-foreground: 350 100% 10%;
+    --secondary: 350 100% 92%;
+    --secondary-foreground: 350 100% 10%;
+    --muted: 350 100% 92%;
+    --muted-foreground: 350 100% 40%;
+    --accent: 350 100% 92%;
+    --accent-foreground: 350 100% 10%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 350 100% 87%;
+    --input: 350 100% 87%;
+    --ring: 350 91% 71%;
+  }
 }
 
 @layer base {
@@ -64,5 +106,29 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+.masonry-container {
+  column-count: 3;
+  column-gap: 1rem;
+}
+
+.masonry-item {
+  display: inline-block;
+  width: 100%;
+  margin-bottom: 1rem;
+  break-inside: avoid;
+}
+
+@media (max-width: 1024px) {
+  .masonry-container {
+    column-count: 2;
+  }
+}
+
+@media (max-width: 768px) {
+  .masonry-container {
+    column-count: 1;
   }
 }

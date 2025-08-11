@@ -3,21 +3,17 @@
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { GoalWithHabits } from "@/types";
 import HabitTracker from "@/components/modules/HabitTracker";
 import TodoList from "@/components/modules/TodoList";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ThemeSwitcher } from "@/components/modules/ThemeSwitcher";
 
 export default function DashboardPage() {
   const { isAuthenticated, user, logout, loading } = useAuth();
   const router = useRouter();
   const [goals, setGoals] = useState<GoalWithHabits[]>([]);
   const [activeTab, setActiveTab] = useState("goals");
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const [isScrollable, setIsScrollable] = useState(false);
-  const [showLeftArrow, setShowLeftArrow] = useState(false);
-  const [showRightArrow, setShowRightArrow] = useState(true);
 
   useEffect(() => {
     if (!loading && !isAuthenticated) {
@@ -33,7 +29,7 @@ export default function DashboardPage() {
         return;
       }
       try {
-        const response = await fetch("http://localhost:8000/api/v1/goals", {
+        const response = await fetch("http://localhost:8001/api/v1/goals", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -54,48 +50,8 @@ export default function DashboardPage() {
     }
   }, [isAuthenticated, router]);
 
-  const checkScrollability = () => {
-    const container = scrollContainerRef.current;
-    if (container) {
-      const hasOverflow = container.scrollWidth > container.clientWidth;
-      setIsScrollable(hasOverflow);
-      setShowLeftArrow(container.scrollLeft > 0);
-      setShowRightArrow(
-        hasOverflow &&
-          container.scrollLeft < container.scrollWidth - container.clientWidth
-      );
-    }
-  };
-
-  useEffect(() => {
-    checkScrollability();
-    window.addEventListener("resize", checkScrollability);
-    return () => window.removeEventListener("resize", checkScrollability);
-  }, [goals]);
-
   const handleGoalDeleted = (goalId: string) => {
     setGoals((prevGoals) => prevGoals.filter((goal) => goal._id !== goalId));
-  };
-
-  const scroll = (direction: "left" | "right") => {
-    const container = scrollContainerRef.current;
-    if (container) {
-      const scrollAmount = container.clientWidth * 0.8;
-      container.scrollBy({
-        left: direction === "left" ? -scrollAmount : scrollAmount,
-        behavior: "smooth",
-      });
-    }
-  };
-
-  const handleScroll = () => {
-    const container = scrollContainerRef.current;
-    if (container) {
-      setShowLeftArrow(container.scrollLeft > 0);
-      setShowRightArrow(
-        container.scrollLeft < container.scrollWidth - container.clientWidth - 1
-      );
-    }
   };
 
   if (loading || !isAuthenticated) {
@@ -109,26 +65,32 @@ export default function DashboardPage() {
   return (
     <div className="flex min-h-screen flex-col items-center p-24">
       <div className="w-full flex justify-between items-center mb-8">
-        <div className="flex items-center space-x-4">
-          <h1
-            className={`text-4xl font-bold cursor-pointer ${
-              activeTab === "goals" ? "text-black" : "text-gray-400"
+        <div className="flex items-center border border-gray-300 rounded-full p-1">
+          <button
+            className={`px-6 py-2 rounded-full text-lg font-semibold ${
+              activeTab === "goals"
+                ? "bg-gray-800 text-white"
+                : "bg-transparent text-gray-800"
             }`}
             onClick={() => setActiveTab("goals")}
           >
             Goals
-          </h1>
-          <h1
-            className={`text-4xl font-bold cursor-pointer ${
-              activeTab === "todos" ? "text-black" : "text-gray-400"
+          </button>
+          <div className="border-l border-gray-300 h-6 mx-1"></div>
+          <button
+            className={`px-6 py-2 rounded-full text-lg font-semibold ${
+              activeTab === "todos"
+                ? "bg-gray-800 text-white"
+                : "bg-transparent text-gray-800"
             }`}
             onClick={() => setActiveTab("todos")}
           >
             To-do List
-          </h1>
+          </button>
         </div>
-        <div>
-          <span className="mr-4">
+        <div className="flex items-center">
+          <ThemeSwitcher />
+          <span className="ml-4 mr-4">
             Welcome, <span className="font-bold">{user?.email}</span>
           </span>
           <Button
@@ -147,25 +109,11 @@ export default function DashboardPage() {
           <Button onClick={() => router.push("/new-goal")}>
             Set a New Goal
           </Button>
-          <div className="mt-8 w-full max-w-6xl relative">
-            {isScrollable && showLeftArrow && (
-              <Button
-                variant="ghost"
-                size="icon"
-                className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/80 hover:bg-white rounded-full"
-                onClick={() => scroll("left")}
-              >
-                <ChevronLeft className="h-6 w-6" />
-              </Button>
-            )}
-            <div
-              ref={scrollContainerRef}
-              className="flex overflow-x-auto space-x-4 p-4 hide-scrollbar"
-              onScroll={handleScroll}
-            >
+          <div className="mt-8 w-full" style={{ width: "85%" }}>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {goals.length > 0 ? (
                 goals.map((goal) => (
-                  <div key={goal._id} className="flex-shrink-0 w-80">
+                  <div key={goal._id}>
                     <HabitTracker
                       goal={goal}
                       onGoalDeleted={handleGoalDeleted}
@@ -178,16 +126,6 @@ export default function DashboardPage() {
                 </div>
               )}
             </div>
-            {isScrollable && showRightArrow && (
-              <Button
-                variant="ghost"
-                size="icon"
-                className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/80 hover:bg-white rounded-full"
-                onClick={() => scroll("right")}
-              >
-                <ChevronRight className="h-6 w-6" />
-              </Button>
-            )}
           </div>
         </>
       )}

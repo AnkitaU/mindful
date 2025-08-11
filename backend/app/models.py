@@ -75,8 +75,13 @@ class GoalCreate(BaseModel):
 class GoalWithHabits(Goal):
     habits: list[Habit]
 
-class GoalUpdate(BaseModel):
+class HabitCreate(BaseModel):
     description: str
+    frequency: str
+
+class GoalUpdate(BaseModel):
+    description: Optional[str] = None
+    habits: Optional[list[HabitCreate]] = None
 
 class Todo(BaseModel):
     id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
