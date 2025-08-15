@@ -2,6 +2,16 @@ from pydantic import BaseModel, Field, EmailStr, validator
 from datetime import datetime
 from typing import Optional
 from bson import ObjectId
+from enum import Enum
+
+class GoalCategory(str, Enum):
+    HEALTH = "Health"
+    WELLNESS = "Wellness"
+    WORK = "Work"
+    FINANCIAL = "Financial"
+    FAMILY = "Family"
+    PETS = "Pets"
+    OTHER = "Other"
 
 class PyObjectId(ObjectId):
     @classmethod
@@ -60,6 +70,9 @@ class Goal(BaseModel):
     id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
     description: str
     user_id: PyObjectId = Field(...)
+    completion_date: Optional[datetime] = None
+    status: str = "in_progress"
+    category: Optional[GoalCategory] = GoalCategory.OTHER
 
     class Config:
         allow_population_by_field_name = True
@@ -71,9 +84,15 @@ class TodoUpdate(BaseModel):
 
 class GoalCreate(BaseModel):
     description: str
+    completion_date: Optional[datetime] = None
+    category: Optional[GoalCategory] = GoalCategory.OTHER
 
 class GoalWithHabits(Goal):
     habits: list[Habit]
+
+class GoalWithProgress(GoalWithHabits):
+    progress: float
+    status: str
 
 class HabitCreate(BaseModel):
     description: str
@@ -82,6 +101,11 @@ class HabitCreate(BaseModel):
 class GoalUpdate(BaseModel):
     description: Optional[str] = None
     habits: Optional[list[HabitCreate]] = None
+    status: Optional[str] = None
+    category: Optional[GoalCategory] = None
+
+class GoalStatusUpdate(BaseModel):
+    status: str
 
 class Todo(BaseModel):
     id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")

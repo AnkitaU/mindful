@@ -85,31 +85,51 @@ export default function HabitTracker({ goal, onGoalDeleted }: HabitTrackerProps)
 
   return (
     <>
-      <Card className="w-full">
-        <CardHeader>
-          <div className="flex justify-between items-start">
-            <CardTitle>{goal.description}</CardTitle>
-            <div className="flex items-center">
-              <Button variant="ghost" size="icon" onClick={handleEdit}>
-                <Pencil className="h-4 w-4" />
-              </Button>
-              <Button variant="ghost" size="icon" onClick={() => handleDeleteClick(goal._id)}>
-                <Trash2 className="h-4 w-4" />
-              </Button>
-            </div>
+      <div className="bg-white dark:bg-card p-6 rounded-lg text-black dark:text-white animated-border">
+        <div className="flex justify-between items-start mb-4">
+          <div>
+            <h2 className="text-2xl font-bold">{goal.description}</h2>
+            {goal.completion_date && (
+              <p className="text-sm text-gray-500 dark:text-gray-400">
+                Due: {new Date(goal.completion_date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+              </p>
+            )}
           </div>
-        </CardHeader>
-        <CardContent>
-          <h3 className="font-semibold">Habits:</h3>
-          <ul className="list-disc pl-5 mt-2">
-            {goal.habits.map((habit) => (
-              <li key={habit._id}>
+          <div className="flex items-center">
+            <Button variant="ghost" size="icon" onClick={handleEdit}>
+              <Pencil className="h-5 w-5" />
+            </Button>
+            <Button variant="ghost" size="icon" onClick={() => handleDeleteClick(goal._id)}>
+              <Trash2 className="h-5 w-5" />
+            </Button>
+          </div>
+        </div>
+
+        <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5 mb-4">
+          <div
+            className="bg-primary h-2.5 rounded-full"
+            style={{ width: `${goal.progress || 0}%` }}
+          ></div>
+        </div>
+
+        <h3 className="font-semibold mb-2">Habits:</h3>
+        <ul className="space-y-2">
+          {goal.habits.map((habit) => (
+            <li key={habit._id} className="flex items-center">
+              <span className="h-2 w-2 bg-primary rounded-full mr-3"></span>
+              <span>
                 {habit.description} ({habit.frequency})
-              </li>
-            ))}
-          </ul>
-        </CardContent>
-      </Card>
+              </span>
+            </li>
+          ))}
+        </ul>
+        {goal.status === 'completed' && (
+            <div className="flex justify-between items-center mt-4">
+                <p className="text-sm text-gray-500 dark:text-gray-400">#{goal._id.slice(-6)}</p>
+                <span className="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">Completed</span>
+            </div>
+        )}
+      </div>
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
         <DialogContent>
           <DialogHeader>

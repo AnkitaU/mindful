@@ -5,9 +5,12 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/context/AuthContext";
+import TopBar from "@/components/modules/TopBar";
 
 export default function NewGoalPage() {
   const [goal, setGoal] = useState("");
+  const [completionDate, setCompletionDate] = useState("");
+  const [category, setCategory] = useState("Other");
   const { isAuthenticated } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -47,7 +50,7 @@ export default function NewGoalPage() {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ description: goal }),
+        body: JSON.stringify({ description: goal, completion_date: completionDate, category: category }),
       });
 
       if (response.ok) {
@@ -61,21 +64,44 @@ export default function NewGoalPage() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen">
-      <form onSubmit={handleSubmit} className="w-full max-w-md p-8 space-y-4 bg-white rounded-lg shadow-md">
-        <h2 className="text-2xl font-bold text-center">
-          {goalId ? "Edit Your Goal" : "Set a New Goal"}
-        </h2>
+    <div className="flex flex-col min-h-screen bg-background text-foreground">
+      <div className="w-full p-8">
+        <TopBar activeTab="new-goal" />
+        <div className="flex items-center justify-center">
+          <form onSubmit={handleSubmit} className="w-full max-w-md p-8 space-y-4 bg-white rounded-lg shadow-md">
+            <h2 className="text-2xl font-bold text-center">
+              {goalId ? "Edit Your Goal" : "Set a New Goal"}
+            </h2>
         <Input
           type="text"
           placeholder="What's your goal?"
           value={goal}
           onChange={(e) => setGoal(e.target.value)}
         />
+        <Input
+          type="date"
+          value={completionDate}
+          onChange={(e) => setCompletionDate(e.target.value)}
+        />
+        <select
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+          className="w-full p-2 border rounded"
+        >
+          <option value="Health">Health</option>
+          <option value="Wellness">Wellness</option>
+          <option value="Work">Work</option>
+          <option value="Financial">Financial</option>
+          <option value="Family">Family</option>
+          <option value="Pets">Pets</option>
+          <option value="Other">Other</option>
+        </select>
         <Button type="submit" className="w-full">
           {goalId ? "Update Goal" : "Create Habits"}
         </Button>
       </form>
+      </div>
+      </div>
     </div>
   );
 }

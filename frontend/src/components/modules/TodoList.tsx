@@ -2,49 +2,65 @@
 
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 import { Todo } from "@/types";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 
-export default function TodoList() {
+interface TodoListProps {
+  todos: Todo[];
+  setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
+}
+
+export default function TodoList({ todos, setTodos }: TodoListProps) {
   const { isAuthenticated, loading } = useAuth();
   const router = useRouter();
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const [phoneNumber, setPhoneNumber] = useState("");
+
+  const handleSendSms = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      router.push("/login");
+      return;
+    }
+
+    const message = todos
+      .map((todo) => `${todo.description} - ${todo.completed ? "Completed" : "Pending"}`)
+      .join("\n");
+
+    try {
+      const response = await fetch("http://localhost:8001/api/v1/sms/send-sms/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ phone_number: phoneNumber, message }),
+      });
+
+      if (response.ok) {
+        alert("SMS sent successfully!");
+      } else {
+        alert("Failed to send SMS.");
+      }
+    } catch (error) {
+      console.error("An error occurred:", error);
+      alert("An error occurred while sending the SMS.");
+    }
+  };
 
   useEffect(() => {
     if (!loading && !isAuthenticated) {
       router.push("/login");
     }
   }, [isAuthenticated, loading, router]);
-
-  useEffect(() => {
-    const fetchTodos = async () => {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        router.push("/login");
-        return;
-      }
-      try {
-        const response = await fetch("http://localhost:8001/api/v1/todos/", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        if (response.ok) {
-          const data = await response.json();
-          setTodos(data);
-        } else {
-          console.error("Failed to fetch todos");
-        }
-      } catch (error) {
-        console.error("An error occurred:", error);
-      }
-    };
-
-    if (isAuthenticated) {
-      fetchTodos();
-    }
-  }, [isAuthenticated, router]);
 
   const handleToggle = async (id: string, completed: boolean) => {
     const token = localStorage.getItem("token");
@@ -109,8 +125,34 @@ export default function TodoList() {
 
   return (
     <Card className="w-full">
-      <CardHeader>
+      <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle>To-do List</CardTitle>
+        <Dialog>
+          <DialogTrigger asChild>
+            <button className="text-sm font-medium text-blue-600 hover:text-blue-800">
+              Send SMS
+            </button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Send To-Do List via SMS</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4">
+              <Input
+                type="tel"
+                placeholder="Enter phone number"
+                value={phoneNumber}
+                onChange={(e) => setPhoneNumber(e.target.value)}
+              />
+              <button
+                onClick={handleSendSms}
+                className="w-full rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+              >
+                Send
+              </button>
+            </div>
+          </DialogContent>
+        </Dialog>
       </CardHeader>
       <CardContent>
         {todos.length > 0 ? (

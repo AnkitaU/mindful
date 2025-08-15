@@ -9,10 +9,14 @@ export interface Goal {
   _id: string;
   description: string;
   user_id: string;
+  category: string;
 }
 
 export interface GoalWithHabits extends Goal {
   habits: Habit[];
+  completion_date?: string;
+  progress?: number;
+  status?: string;
 }
 export interface Todo {
   _id: string;
