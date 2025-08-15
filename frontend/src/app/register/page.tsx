@@ -11,6 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -44,8 +45,9 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen">
-      <Card className="mx-auto max-w-sm">
+    <div className="flex flex-col items-center justify-center min-h-screen">
+      <Image src="/logo.png" alt="Mindful Logo" width={200} height={200} />
+      <Card className="mx-auto max-w-sm mt-8">
         <CardHeader>
           <CardTitle className="text-2xl">Sign Up</CardTitle>
           <CardDescription>
