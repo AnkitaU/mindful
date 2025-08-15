@@ -79,13 +79,13 @@ const AIAssist: React.FC<AIAssistProps> = ({ setActiveTab }) => {
             </div>
             <div className="space-y-2">
               <button className="bg-background hover:bg-muted text-foreground font-semibold py-2 px-4 rounded-full text-sm">
-                "Can you help me with my first goal?"
+                "create new goal"
               </button>
               <button className="bg-background hover:bg-muted text-foreground font-semibold py-2 px-4 rounded-full text-sm">
-                "Edit the dates for my goals"
+                "go to to-do"
               </button>
               <button className="bg-background hover:bg-muted text-foreground font-semibold py-2 px-4 rounded-full text-sm">
-                "Can you create a habit for ___ goal"
+                "go to dashboard"
               </button>
             </div>
           </>
