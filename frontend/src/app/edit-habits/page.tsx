@@ -109,7 +109,7 @@ export default function EditHabitsPage() {
 
   return (
     <div className="flex items-center justify-center min-h-screen">
-      <form onSubmit={handleSubmit} className="w-full max-w-2xl p-8 space-y-6 bg-white rounded-lg shadow-md">
+      <form onSubmit={handleSubmit} className="w-full max-w-2xl p-8 space-y-6 bg-card rounded-lg">
         <h2 className="text-3xl font-bold text-center">Edit Habits for Your Goal</h2>
         <div>
           <label className="text-lg font-semibold">Goal:</label>

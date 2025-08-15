@@ -10,6 +10,8 @@ interface FiltersProps {
   setWeekly: (value: boolean) => void;
   monthly: boolean;
   setMonthly: (value: boolean) => void;
+  oneTime: boolean;
+  setOneTime: (value: boolean) => void;
 }
 
 export default function Filters({
@@ -19,6 +21,8 @@ export default function Filters({
   setWeekly,
   monthly,
   setMonthly,
+  oneTime,
+  setOneTime,
 }: FiltersProps) {
   return (
     <div className="bg-white dark:bg-card p-6 rounded-lg max-w-xs animated-border">
@@ -45,6 +49,16 @@ export default function Filters({
                 Monthly
               </label>
               <Switch id="monthly" checked={monthly} onCheckedChange={setMonthly} />
+            </div>
+            <div className="flex items-center justify-between max-w-[150px]">
+              <label htmlFor="one-time" className="text-black dark:text-white">
+                One-Time
+              </label>
+              <Switch
+                id="one-time"
+                checked={oneTime}
+                onCheckedChange={setOneTime}
+              />
             </div>
           </div>
         </div>

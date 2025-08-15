@@ -49,7 +49,7 @@ const GoalPieChart = () => {
       initial={{ opacity: 0, scale: 0.5 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.5 }}
-      className="w-full max-w-xs p-8 space-y-4"
+      className="w-full max-w-xs p-4 pb-0 space-y-4"
     >
       <PieChart width={300} height={300}>
         <Pie

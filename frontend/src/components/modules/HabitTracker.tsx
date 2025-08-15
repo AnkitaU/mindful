@@ -85,7 +85,7 @@ export default function HabitTracker({ goal, onGoalDeleted }: HabitTrackerProps)
 
   return (
     <>
-      <div className="bg-white dark:bg-card p-6 rounded-lg text-black dark:text-white animated-border">
+      <div className="bg-card p-6 rounded-lg text-black dark:text-white animated-border">
         <div className="flex justify-between items-start mb-4">
           <div>
             <h2 className="text-2xl font-bold">{goal.description}</h2>

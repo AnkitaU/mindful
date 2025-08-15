@@ -7,18 +7,15 @@ import { ThemeSwitcher } from "@/components/modules/ThemeSwitcher";
 
 interface TopBarProps {
   activeTab: string;
-  setActiveTab?: (tab: string) => void;
+  setActiveTab: (tab: string) => void;
 }
 
 export default function TopBar({ activeTab, setActiveTab }: TopBarProps) {
   const { logout } = useAuth();
   const router = useRouter();
 
-  const handleNavigation = (path: string, tab?: string) => {
-    if (tab && setActiveTab) {
-      setActiveTab(tab);
-    }
-    router.push(path);
+  const handleNavigation = (tab: string) => {
+    setActiveTab(tab);
   };
 
   return (
@@ -43,13 +40,13 @@ export default function TopBar({ activeTab, setActiveTab }: TopBarProps) {
         <h1 className="text-2xl font-bold">mindful web app</h1>
       </div>
       <nav className="flex items-center space-x-8">
-        <button onClick={() => handleNavigation("/", "dashboard")} className={`text-lg ${activeTab === 'dashboard' ? 'font-bold' : ''}`}>
+        <button onClick={() => handleNavigation("dashboard")} className={`text-lg ${activeTab === 'dashboard' ? 'font-bold' : ''}`}>
           Dashboard
         </button>
-        <button onClick={() => handleNavigation("/", "todos")} className={`text-lg ${activeTab === 'todos' ? 'font-bold' : ''}`}>
+        <button onClick={() => handleNavigation("todos")} className={`text-lg ${activeTab === 'todos' ? 'font-bold' : ''}`}>
           To-Do
         </button>
-        <button onClick={() => handleNavigation("/new-goal")} className={`text-lg ${activeTab === 'new-goal' ? 'font-bold' : ''}`}>
+        <button onClick={() => handleNavigation("new-goal")} className={`text-lg ${activeTab === 'new-goal' ? 'font-bold' : ''}`}>
           Create New Goal
         </button>
       </nav>

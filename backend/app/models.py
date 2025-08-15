@@ -107,6 +107,9 @@ class GoalUpdate(BaseModel):
 class GoalStatusUpdate(BaseModel):
     status: str
 
+class AIAssistRequest(BaseModel):
+    prompt: str
+
 class Todo(BaseModel):
     id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
     description: str

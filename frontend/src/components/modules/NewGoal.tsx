@@ -5,9 +5,13 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/context/AuthContext";
-import TopBar from "@/components/modules/TopBar";
 
-export default function NewGoalPage() {
+interface NewGoalProps {
+  setActiveTab?: (tab: string) => void;
+  onGoalCreated?: () => void;
+}
+
+export default function NewGoal({ setActiveTab, onGoalCreated }: NewGoalProps) {
   const [goal, setGoal] = useState("");
   const [completionDate, setCompletionDate] = useState("");
   const [category, setCategory] = useState("Other");
@@ -41,7 +45,9 @@ export default function NewGoalPage() {
     }
 
     const method = goalId ? "PUT" : "POST";
-    const url = goalId ? `/api/v1/goals/${goalId}` : "/api/v1/goals";
+    const url = goalId
+      ? `http://localhost:8001/api/v1/goals/${goalId}`
+      : "http://localhost:8001/api/v1/goals";
 
     try {
       const response = await fetch(url, {
@@ -50,13 +56,24 @@ export default function NewGoalPage() {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ description: goal, completion_date: completionDate, category: category }),
+        body: JSON.stringify({
+          description: goal,
+          completion_date: completionDate,
+          category: category,
+        }),
       });
 
       if (response.ok) {
-        router.push("/");
+        if (onGoalCreated) {
+          onGoalCreated();
+        }
+        if (setActiveTab) {
+          setActiveTab("dashboard");
+        } else {
+          router.push("/");
+        }
       } else {
-        console.error(`Failed to ${goalId ? 'update' : 'create'} goal`);
+        console.error(`Failed to ${goalId ? "update" : "create"} goal`);
       }
     } catch (error) {
       console.error("An error occurred:", error);
@@ -64,14 +81,14 @@ export default function NewGoalPage() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-background text-foreground">
-      <div className="w-full p-8">
-        <TopBar activeTab="new-goal" />
-        <div className="flex items-center justify-center">
-          <form onSubmit={handleSubmit} className="w-full max-w-md p-8 space-y-4 bg-white rounded-lg shadow-md">
-            <h2 className="text-2xl font-bold text-center">
-              {goalId ? "Edit Your Goal" : "Set a New Goal"}
-            </h2>
+    <div className="flex items-center justify-center">
+      <form
+        onSubmit={handleSubmit}
+        className="w-full max-w-md p-8 space-y-4 bg-card rounded-lg"
+      >
+        <h2 className="text-2xl font-bold text-center">
+          {goalId ? "Edit Your Goal" : "Set a New Goal"}
+        </h2>
         <Input
           type="text"
           placeholder="What's your goal?"
@@ -100,8 +117,6 @@ export default function NewGoalPage() {
           {goalId ? "Update Goal" : "Create Habits"}
         </Button>
       </form>
-      </div>
-      </div>
     </div>
   );
 }

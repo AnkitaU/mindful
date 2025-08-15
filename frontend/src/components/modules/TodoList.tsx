@@ -124,35 +124,37 @@ export default function TodoList({ todos, setTodos }: TodoListProps) {
   };
 
   return (
-    <Card className="w-full">
-      <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle>To-do List</CardTitle>
-        <Dialog>
-          <DialogTrigger asChild>
-            <button className="text-sm font-medium text-blue-600 hover:text-blue-800">
-              Send SMS
-            </button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Send To-Do List via SMS</DialogTitle>
-            </DialogHeader>
-            <div className="space-y-4">
-              <Input
-                type="tel"
-                placeholder="Enter phone number"
-                value={phoneNumber}
-                onChange={(e) => setPhoneNumber(e.target.value)}
-              />
-              <button
-                onClick={handleSendSms}
-                className="w-full rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
-              >
-                Send
+    <Card className="w-full relative bg-card">
+      <CardHeader>
+        <CardTitle className="text-center text-3xl">Checklist</CardTitle>
+        <div className="absolute top-6 right-6">
+          <Dialog>
+            <DialogTrigger asChild>
+              <button className="text-sm font-medium text-blue-600 hover:text-blue-800">
+                Send SMS
               </button>
-            </div>
-          </DialogContent>
-        </Dialog>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Send To-Do List via SMS</DialogTitle>
+              </DialogHeader>
+              <div className="space-y-4">
+                <Input
+                  type="tel"
+                  placeholder="Enter phone number"
+                  value={phoneNumber}
+                  onChange={(e) => setPhoneNumber(e.target.value)}
+                />
+                <button
+                  onClick={handleSendSms}
+                  className="w-full rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+                >
+                  Send
+                </button>
+              </div>
+            </DialogContent>
+          </Dialog>
+        </div>
       </CardHeader>
       <CardContent>
         {todos.length > 0 ? (
@@ -167,7 +169,7 @@ export default function TodoList({ todos, setTodos }: TodoListProps) {
                     type="checkbox"
                     checked={todo.completed}
                     onChange={() => handleToggle(todo._id, todo.completed)}
-                    className="form-checkbox h-5 w-5 text-blue-600"
+                    className="custom-checkbox"
                   />
                   <span
                     className={`${
