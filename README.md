@@ -2,6 +2,9 @@
 
 This is a web application for goal setting and habit tracking.
 
+## Demo 
+[Link to Demo](https://drive.google.com/file/d/1uvbV_s17dWp7KNBsZZXy5cGcSNLsQAkX/view?usp=sharing)
+
 ## Technology Stack
 
 *   **Frontend:** Next.js, React, Tailwind CSS, shadcn/ui
