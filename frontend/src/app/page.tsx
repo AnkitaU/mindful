@@ -14,6 +14,7 @@ import HabitBarChart from "@/components/modules/HabitBarChart";
 import TopBar from "@/components/modules/TopBar";
 import AIAssist from "@/components/modules/AIAssist";
 import NewGoal from "@/components/modules/NewGoal";
+import Header from "@/components/modules/Header";
 
 export default function DashboardPage() {
   const { isAuthenticated, user, logout, loading } = useAuth();
@@ -146,6 +147,7 @@ export default function DashboardPage() {
             <div className="w-3/5">
               {activeTab === "dashboard" && (
                 <>
+                  <Header goals={goals} todos={todos} />
                   {filteredGoals.length > 0 ? (
                     <div className="grid grid-cols-2 gap-8">
                       {filteredGoals.map((goal) => (

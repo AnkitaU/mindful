@@ -23,4 +23,5 @@ export interface Todo {
   description: string;
   completed: boolean;
   due_date: string;
+  habit_id?: string;
 }
