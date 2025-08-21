@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,7 +8,7 @@ import { useAuth } from "@/context/AuthContext";
 import { GoalWithHabits, Habit } from "@/types";
 import { X, Plus } from "lucide-react";
 
-export default function EditHabitsPage() {
+function EditHabitsContent() {
   const [goal, setGoal] = useState<GoalWithHabits | null>(null);
   const [habits, setHabits] = useState<Habit[]>([]);
   const { isAuthenticated } = useAuth();
@@ -152,5 +152,13 @@ export default function EditHabitsPage() {
         </Button>
       </form>
     </div>
+  );
+}
+
+export default function EditHabitsPage() {
+  return (
+    <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
+      <EditHabitsContent />
+    </Suspense>
   );
 }
