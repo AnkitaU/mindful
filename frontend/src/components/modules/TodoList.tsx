@@ -36,7 +36,7 @@ export default function TodoList({ todos, setTodos }: TodoListProps) {
       .join("\n");
 
     try {
-      const response = await fetch("http://localhost:8001/api/v1/sms/send-sms/", {
+      const response = await fetch("/api/v1/sms/send-sms", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -70,7 +70,7 @@ export default function TodoList({ todos, setTodos }: TodoListProps) {
     }
 
     try {
-      const response = await fetch(`http://localhost:8001/api/v1/todos/${id}`, {
+      const response = await fetch(`/api/v1/todos/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -103,7 +103,7 @@ export default function TodoList({ todos, setTodos }: TodoListProps) {
     if (confirm("Are you sure you want to delete this task?")) {
       try {
         const response = await fetch(
-          `http://localhost:8001/api/v1/todos/${id}`,
+          `/api/v1/todos/${id}`,
           {
             method: "DELETE",
             headers: {

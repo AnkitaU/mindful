@@ -46,8 +46,8 @@ export default function NewGoal({ setActiveTab, onGoalCreated }: NewGoalProps) {
 
     const method = goalId ? "PUT" : "POST";
     const url = goalId
-      ? `http://localhost:8001/api/v1/goals/${goalId}`
-      : "http://localhost:8001/api/v1/goals";
+      ? `/api/v1/goals/${goalId}`
+      : "/api/v1/goals";
 
     try {
       const response = await fetch(url, {

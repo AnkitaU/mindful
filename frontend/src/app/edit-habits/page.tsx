@@ -30,7 +30,7 @@ export default function EditHabitsPage() {
       }
 
       try {
-        const response = await fetch(`http://localhost:8001/api/v1/goals/${goalId}`, {
+        const response = await fetch(`/api/v1/goals/${goalId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -84,7 +84,7 @@ export default function EditHabitsPage() {
     }
 
     try {
-      const response = await fetch(`http://localhost:8001/api/v1/goals/${goalId}`, {
+      const response = await fetch(`/api/v1/goals/${goalId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

@@ -50,7 +50,7 @@ export default function HabitTracker({ goal, onGoalDeleted }: HabitTrackerProps)
     }
 
     try {
-      const response = await fetch(`http://localhost:8001/api/v1/goals/${goalToDelete}`, {
+      const response = await fetch(`/api/v1/goals/${goalToDelete}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,

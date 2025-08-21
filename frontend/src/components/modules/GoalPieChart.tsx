@@ -19,7 +19,7 @@ const GoalPieChart = () => {
       if (!token) return;
 
       try {
-        const response = await fetch("http://localhost:8001/api/v1/goals/stats", {
+        const response = await fetch("/api/v1/goals/stats", {
           headers: {
             Authorization: `Bearer ${token}`,
           },

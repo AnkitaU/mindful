@@ -72,7 +72,7 @@ export default function DashboardPage() {
       return;
     }
     try {
-      const response = await fetch("http://localhost:8001/api/v1/goals", {
+      const response = await fetch("/api/v1/goals", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -95,7 +95,7 @@ export default function DashboardPage() {
       return;
     }
     try {
-      const response = await fetch("http://localhost:8001/api/v1/todos/", {
+      const response = await fetch("/api/v1/todos", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
